@@ -10,7 +10,7 @@ import Login from "./pages/Login.jsx";
 import About_Us from "./pages/About_us.jsx";
 import ContactUs from "./pages/Contact_us.jsx";
 import { Provider } from "react-redux";
-import { store } from "./Store.js";
+import { store } from "./store.js";
 
 
 

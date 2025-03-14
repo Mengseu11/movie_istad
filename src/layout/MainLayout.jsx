@@ -1,21 +1,14 @@
 import { Outlet } from "react-router";
 import AppNavbar from "../components/AppNavbar";
 import Footer from "../components/Footer";
-import CardRightSide from "../components/CardRightSide";
+import Banner from "../components/Banner";
 
 export default function MainLayout() {
     return (
-        <>
+        <main className="py-5">
             <AppNavbar/>
-            <div className="grid grid-cols-12">
-                <div className="col-span-8">
-                    <Outlet/>
-                </div>
-                <div className="col-span-4">
-                    <CardRightSide/>
-                </div>
-            </div>
+            <div className="p-1 py-9"><Banner/></div>
             <Footer/>
-        </>
+        </main>
     )
 }

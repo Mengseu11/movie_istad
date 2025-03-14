@@ -3,14 +3,16 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import MainLayout from "./layout/MainLayout.jsx";
-import People from "./pages/People.jsx";
 import Home from "./pages/Home.jsx";
 import Error from './pages/Error.jsx'
 import Login from "./pages/Login.jsx";
-import About_Us from "./pages/About_us.jsx";
-import ContactUs from "./pages/Contact_us.jsx";
 import { Provider } from "react-redux";
 import { store } from "./store.js";
+import Men from "./pages/Men.jsx";
+import AddtoCart from "./components/AddtoCart.jsx";
+import Women from "./pages/Women.jsx";
+import { Sidebar } from "lucide-react";
+import AboutUs from "./pages/AboutUs.jsx";
 
 
 
@@ -28,21 +30,30 @@ const router = createBrowserRouter(
       errorElement: <Error/>
     },
     {
-      path: "/people",
-      element: <People/>
+      path: "/men",
+      element: <Men/>
+    },
+    {
+      path: "/women",
+      element : <Women/>
+    },
+    {
+      path: "/cart",
+      element: <AddtoCart/>
     },
     {
       path:'/login',
       element:<Login/>
     },
     {
-      path:'/about-us',
-      element:<About_Us/>
+      path:'/sidebar',
+      element:<Sidebar/>
     },
     {
-      path:'/contact-us',
-      element:<ContactUs/>
-    }
+      path:'/aboutus',
+      element:<AboutUs/>
+    },
+   
   ]
 )
 createRoot(document.getElementById("root")).render(

@@ -1,12 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit'
 import counterReducer from './features/counter/counterSlice'
-import movieReducer from './features/movie/movieSlice'
-import authReducer from './features/auth/authSlice'
 
+import authReducer from './features/auth/authSlice'
+import peopleReducer from './features/people/peopleSlice'
+import cartReducer from './features/cart/cartSlice'
+import womenReeducer from './features/women/womenSlice'
+import Women from './pages/Women'
 export const store = configureStore({
   reducer: {
     counter : counterReducer,
-    movie: movieReducer,
+    // movie: movieReducer,
     auth : authReducer,
+    men : peopleReducer,
+    cart: cartReducer,
+    women: womenReeducer,
   },  
 })

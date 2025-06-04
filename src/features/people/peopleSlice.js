@@ -1,35 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchMovies, fetchMoviesDetail } from "./movieAction";
+import { fetchPeople, fetchPeopleDetail } from "./peopleAction";
+
 
 const initialState = {
     data: {},
     status: "",
     error: {},
-    detail : {}
+    detail: {}
 }
-export const movieSlice = createSlice({
-    name : "movie",
+export const peopleSlice = createSlice({
+    name : "people",
     initialState: initialState,
     reducers: {},
     extraReducers(builder){
         builder
-            .addCase(fetchMovies.fulfilled,(state,action) => {              
+            .addCase(fetchPeople.fulfilled,(state,action) => {
                 state.status = "SUCCESS"
                 state.data = action.payload /* payload from api */
 
             })
-            .addCase(fetchMovies.pending,(state,action) => {
+            .addCase(fetchPeople.pending,(state,action) => {
                 state.status = "PENDING"
             })
-            .addCase(fetchMovies.rejected,(state,action) => {
+            .addCase(fetchPeople.rejected,(state,action) => {
                 state.status = "ERROR"
                 state.error = action.error
             })
-            .addCase(fetchMoviesDetail.fulfilled,(state,action)=>{
+            .addCase(fetchPeopleDetail.fulfilled,(state,action)=> {
                 state.detail = action.payload
             })
-
     }
 })
 
-export default movieSlice.reducer
+export default peopleSlice.reducer

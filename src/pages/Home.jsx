@@ -4,6 +4,15 @@ import { decrement, increment } from "../features/counter/counterSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchMovies } from "../features/movie/movieAction";
+import { Link } from "react-router";
+import AppNavbar from "../components/AppNavbar";
+import Carousel from "../components/Carousel";
+import Popular from "../components/Popular";
+import TopRated from "../components/TopRated";
+import Latest from "../components/Latest";
+import Leaderboard from "../components/Leaderboard";
+import Footer from "../components/Footer";
+
 export default function Home() {
   const dispatch = useDispatch();
 
@@ -23,38 +32,30 @@ export default function Home() {
   };
 
   return (
-    <main>
-      <div className="px-4 py-2 grid grid-cols-2 gap-2">
+    <main className="relative mt-5">
+      {/* <div className="px-4 py-2 grid grid-cols-2 gap-2">
         <ButtonIcon onClick={onIncreasement} icon={<FaPlus />} />
         <ButtonIcon onClick={onDecreasement} icon={<FaMinus />} />
-      </div>
-      <hr />
-      <ul className="grid gap-x-8 gap-y-10 mt-16 sm:grid-cols-2 lg:grid-cols-3 p-10">
-        {data.results &&
-          data.results.map((movie) => (
-            <li className="w-full mx-auto group sm:max-w-sm">
-              <a href="#">
-                <img
-                  src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
-                  loading="lazy"
-                  alt={movie.original_title}
-                  className="w-full rounded-lg"
-                />
-                <div className="mt-3 space-y-2">
-                  <span className="block text-indigo-600 text-sm">
-                    {movie.release_date}
-                  </span>
-                  <h3 className="text-lg text-gray-800 duration-150 group-hover:text-indigo-600 font-semibold">
-                    {movie.original_title}
-                  </h3>
-                  <p className="text-gray-600 text-sm duration-150 group-hover:text-gray-800">
-                    {movie.overview}
-                  </p>
-                </div>
-              </a>
-            </li>
-          ))}
-      </ul>
+      </div> */}
+ 
+      <AppNavbar/>
+      
+      <Carousel />
+
+      
+    <p className="text-blue-900 text-xl px-16 py-4  mt-14 font-bold">TopRated Movie</p>
+    <TopRated/>
+    <div className="mt-14">
+      <Latest/>
+    </div>
+    <p className="text-blue-900 text-xl px-16 py-4 mt-14   font-bold">Popular Movie</p>
+    <Popular/>
+    <div className="p-6 mt-5">
+      <Leaderboard/>
+    </div>
+
+      
+      <Footer/>
     </main>
   );
 }

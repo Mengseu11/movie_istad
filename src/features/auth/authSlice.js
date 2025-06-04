@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { login } from "./authAction";
+import { getProfile, login } from "./authAction";
 
 const initialState = {
   isAuthenticated: false,
@@ -10,7 +10,13 @@ const initialState = {
 const authSlice = createSlice({
   name: "auth",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    logOut : (state) =>{
+      state.isAuthenticated = false,
+      state.accessToken = null,
+      state.profile = {}
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(login.fulfilled, (state, action) => {
@@ -24,8 +30,18 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.isAuthenticated = false
-      });
+      })
+      .addCase(getProfile.pending, (state, action) => {
+        
+    })
+    .addCase(getProfile.fulfilled, (state, action) => {
+        state.profile = action.payload
+        state.isAuthenticated = true
+    })
+    .addCase(getProfile.rejected, (state, action) => {
+        state.profile = {}
+    })
   },
 });
-
+export const {logOut} = authSlice.actions
 export default authSlice.reducer

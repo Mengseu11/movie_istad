@@ -1,161 +1,168 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPeopleDetail } from "../features/people/peopleAction";
+import { fetchKnownfor, fetchPeopleDetail } from "../features/people/peopleAction";
 import AppNavbar from "../components/AppNavbar";
 import { useParams } from "react-router";
-import { fetchMovies } from "../features/movie/movieAction";
+import Footer from "../components/Footer";
 
-export default function PeopleDetail (){
-    const dispatch = useDispatch()
+export default function PeopleDetail() {
+  const dispatch = useDispatch();
+  const params = useParams();
+  const [isExpanded, setIsExpanded] = useState(false);
 
-    const params = useParams()
-    useEffect(()=>{
-        dispatch(fetchPeopleDetail(params.id));
-    },[]);
-    useEffect(()=>{
-        dispatch(fetchMovies(params.id))
-    })
-    const {detail} = useSelector  ((state)=> state.people)
-    const {data,status,error} = useSelector((state)=> state.movie)
-    const [isExpanded, setIsExpanded] = useState(false);
-    console.log("detail",detail)
+  const { detail, knownFor, loading, error } = useSelector(
+    (state) => state.people
+  );
+
+  useEffect(() => {
+    dispatch(fetchPeopleDetail(params.id));
+    dispatch(fetchKnownfor(params.id));
+  }, [dispatch, params.id]);
+
   const toggleReadMore = () => {
     setIsExpanded(!isExpanded);
   };
 
   const displayedBio = isExpanded
-    ? detail.biography
-    : detail.biography?.slice(0, 500);
+    ? detail?.biography
+    : detail?.biography?.slice(0, 500);
 
-    const calculateAge = (birthday) => {
-  if (!birthday) return '';
-  const birthDate = new Date(birthday);
-  const today = new Date();
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const m = today.getMonth() - birthDate.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-    age--;
-  }
-  return age;
-};
-const age = calculateAge(detail.birthday);
-  
-    return(<>
-    <AppNavbar/>
-         <div style={{ display: "flex", padding: "2rem" }}>
-      {/* Left - Profile Image */}
-      <div style={{ marginRight: "2rem" }}>
-        <img
-          src={`https://image.tmdb.org/t/p/w300${detail.profile_path}`}
-          alt={detail.name}
-          style={{
-            width: "250px",
-            height: "auto",
-            borderRadius: "10px",
-            objectFit: "cover",
-          }}
-        />
-         <div style={{
-      fontFamily: 'Arial, sans-serif',
-      padding: '20px',
-    //   border: '1px solid #ddd',
-    //   borderRadius: '8px',
-      maxWidth: '350px', // Adjust width as needed
-    //   boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-    }}>
-      <h2 style={{ fontSize: '1.5rem', marginBottom: '', color: '#333' }}>Personal Info</h2>
+  const calculateAge = (birthday) => {
+    if (!birthday) return "";
+    const birthDate = new Date(birthday);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
 
-      <div style={{ marginBottom: '' }}>
-        <h3 style={{ fontSize: '1.2rem', margin: '', color: '#555' }}>Known For</h3>
-        <p style={{ fontSize: '1rem', margin: 0 }}>{detail.known_for_department || 'N/A'}</p>
-      </div>
+  const age = calculateAge(detail?.birthday);
+  const knownForItems = knownFor?.cast || [];
 
-      <div style={{ marginBottom: '' }}>
-        <h3 style={{ fontSize: '1.2rem', margin: '', color: '#555' }}>Popularity</h3>
-        {/*
-          The TMDb '/person/{person_id}' API doesn't directly give 'Known Credits' count.
-          You'd usually get this by fetching '/person/{person_id}/combined_credits'
-          and counting the length of the 'cast' array.
-          For now, we'll use a placeholder or assume it's passed if available.
-          Let's assume a 'credit_count' prop if you want to pass it from parent.
-        */}
-        <p style={{ fontSize: '1rem', margin: 0 }}>
-          {detail.popularity}
-        </p>
-      </div>
+  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  if (error) return <div className="min-h-screen flex items-center justify-center">Error: {error}</div>;
+  if (!detail) return <div className="min-h-screen flex items-center justify-center">No data found</div>;
 
-      <div style={{ marginBottom: '' }}>
-        <h3 style={{ fontSize: '1.2rem', margin: '', color: '#555' }}>Gender</h3>
-        <p style={{ fontSize: '1rem', margin: 0 }}>
-          {detail.gender === 1 ? 'Female' : detail.gender === 2 ? 'Male' : 'N/A'}
-        </p>
-      </div>
+  return (
+    <>
+      <AppNavbar />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Left - Profile Image and Personal Info */}
+          <div className="w-full lg:w-1/3 xl:w-1/4 flex flex-col items-center lg:items-start">
+            <div className="w-full max-w-[250px]">
+              <img
+                src={`https://image.tmdb.org/t/p/w300${detail.profile_path}`}
+                alt={detail.name}
+                className="w-full h-auto rounded-lg object-cover shadow-md"
+                onError={(e) => {
+                  e.target.src = "https://via.placeholder.com/300x450";
+                }}
+              />
+            </div>
 
-      <div style={{ marginBottom: '' }}>
-        <h3 style={{ fontSize: '1.2rem', margin: '', color: '#555' }}>Birthday</h3>
-        <p style={{ fontSize: '1rem', margin: 0 }}>
-          {detail.birthday ?
-            `${new Date(detail.birthday).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })} (${age} years old)`
-            : 'N/A'}
-        </p>
-      </div>
+            <div className="w-full mt-6 lg:mt-8 px-2">
+              <h2 className="text-xl font-bold mb-4 text-gray-800">Personal Info</h2>
 
-      <div>
-        <h3 style={{ fontSize: '1.2rem', margin: '', color: '#555' }}>Place of Birth</h3>
-        <p style={{ fontSize: '1rem', margin: 0 }}>{detail.place_of_birth || 'N/A'}</p>
-      </div>
-    </div>
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-md font-semibold text-gray-700">Known For</h3>
+                  <p className="text-sm text-gray-600">{detail.known_for_department || "N/A"}</p>
+                </div>
 
-      </div>
+                <div>
+                  <h3 className="text-md font-semibold text-gray-700">Popularity</h3>
+                  <p className="text-sm text-gray-600">{detail.popularity}</p>
+                </div>
 
-      {/* Right - Info */}
-     <div>
-      <h1 style={{ fontSize: "2rem", marginBottom: "", fontWeight: "bold" }}>{detail.name}</h1>
+                <div>
+                  <h3 className="text-md font-semibold text-gray-700">Gender</h3>
+                  <p className="text-sm text-gray-600">
+                    {detail.gender === 1 ? "Female" : detail.gender === 2 ? "Male" : "N/A"}
+                  </p>
+                </div>
 
-      <h2 style={{ fontSize: "1.2rem", fontWeight: "bold" }}>Biography</h2>
-       <p style={{ marginBottom: "", maxWidth: "900px", fontSize: "1rem"}}>
-         <p>
-        {displayedBio}
-        {detail.biography && !isExpanded && "..."}
- 
-      </p>
+                <div>
+                  <h3 className="text-md font-semibold text-gray-700">Birthday</h3>
+                  <p className="text-sm text-gray-600">
+                    {detail.birthday
+                      ? `${new Date(detail.birthday).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })} (${age} years old)`
+                      : "N/A"}
+                  </p>
+                </div>
 
-      {detail.biography && detail.biography.length > 794 && (
-        <span
-          style={{ color: "#00BFFF", cursor: "pointer", fontWeight: "bold",float: "inline-end"}}
-          onClick={toggleReadMore}
-        >
-          {isExpanded ? "Read Less" : "Read More"} &rsaquo;
-        </span>
-      )}
-      </p>
-     
-      <div>
-      <h3 style={{ fontSize: "1.2rem", margin: "1rem 0 0.5rem" }}>Known For</h3>
-      <div style={{ display: "flex", gap: "1rem", overflowX: "auto" }}>
-        {detail.known_for &&
-         detail.known_for.map((movie,index) => (
-          <div key={movie.id} style={{ width: "140px", textAlign: "center" }}>
-            <img
-            src={`https://image.tmdb.org/t/p/w500${detail.backdrop_path}`} alt={detail.original_title}
-              style={{
-                width: "100%",
-                height: "200px",
-                objectFit: "cover",
-                borderRadius: "10px",
-              }}
-            />
-            <p style={{ marginTop: "0.5rem", fontSize: "0.9rem" }}>
-              {detail.title}
-            </p>
+                <div>
+                  <h3 className="text-md font-semibold text-gray-700">Place of Birth</h3>
+                  <p className="text-sm text-gray-600">{detail.place_of_birth || "N/A"}</p>
+                </div>
+              </div>
+            </div>
           </div>
-        ))}
-      </div>
-    </div> 
-     
-    </div>
-    </div>
-    
-    </>)
 
+          {/* Right - Main Content */}
+          <div className="w-full lg:w-2/3 xl:w-3/4">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">{detail.name}</h1>
+
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">Biography</h2>
+              <div className="text-gray-700">
+                <p className="mb-3">
+                  {displayedBio || "No biography available."}
+                  {detail.biography && !isExpanded && detail.biography.length > 500 && "..."}
+                </p>
+                {detail.biography && detail.biography.length > 500 && (
+                  <button
+                    onClick={toggleReadMore}
+                    className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                  >
+                    {isExpanded ? "Read Less" : "Read More"}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="mt-8">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">Known For</h3>
+              {knownForItems.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                  {knownForItems.slice(0, 6).map((movie) => (
+                    <div key={movie.id} className="flex flex-col">
+                      <div className="aspect-[2/3] w-full rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                        <img
+                          src={`https://image.tmdb.org/t/p/w300${
+                            movie.poster_path || movie.backdrop_path
+                          }`}
+                          alt={movie.title || movie.original_title}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.src = "https://via.placeholder.com/140x200";
+                          }}
+                        />
+                      </div>
+                      <p className="mt-2 text-sm font-medium text-gray-900 line-clamp-1">
+                        {movie.title || movie.original_title}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {movie.character && `as ${movie.character}`}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500">No known works found.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </>
+  );
 }

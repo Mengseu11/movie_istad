@@ -21,3 +21,14 @@ export const fetchPeopleDetail = createAsyncThunk('/peopleDetail/fetch',
         }
     }
 )
+
+export const fetchKnownfor = createAsyncThunk('/knownfor/fetch',
+    async(personId)=>{
+        try {
+            let response = await fetch(`https://api.themoviedb.org/3/person/${personId}/combined_credits?api_key=e23f92d8f170ad2fa576190611936eff`)
+            return response.json()
+        } catch (error) {
+            return Promise.reject(error)
+        }
+    }
+)

@@ -19,68 +19,87 @@ export default function Movie() {
     { title: "Top Rated", path: "/toprateds" },
     { title: "Upcoming", path: "/upcoming" },
   ];
+  const getBadgeColor = (rating) => {
+    if (rating >= 7.0) return "bg-green-600";
+    if (rating >= 5.0) return "bg-yellow-500";
+    return "bg-red-500";
+  };
   return (
-     <div className="mt-5">
-          <AppNavbar />
-          <div className="sticky top-20 z-40">
-          <ul className="items-center bg-sky-950 space-y-6 lg:flex lg:space-x-6 lg:space-y-0 px-20 font-bold sticky ">
-              {submenuNav.map((item, idx) => {
-                  return (
-                    <li key={idx}>
-                      {/* <Link
+    <div className="mt-5">
+      <AppNavbar />
+      <div className="sticky top-20 z-40">
+        <ul className="flex overflow-x-auto whitespace-nowrap bg-sky-950 space-x-4 px-4 sm:px-10  lg:px-20 py-4 font-bold">
+          {submenuNav.map((item, idx) => {
+            return (
+              <li key={idx}>
+                {/* <Link
                         to={item.path}
                         className="block text-white  hover:text-gray-300  hover:bg-slate-500 hover:p-2 rounded-xl "
                       >
                         {item.title}
                       </Link> */}
-                      <NavLink 
-                      to={item.path}
-                      className={({isActive}) =>
-                      `block text-white  hover:text-gray-300  hover:bg-slate-500 p-2 rounded-sm ${
-                        isActive? " bg-sky-900 p-1 underline": ""
-                      }`
-                      }
-                      >
-                        {item.title}
-                      </NavLink>
-                    </li>
-                  );
-                })}
-            </ul>
-          </div>
-          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5 px-24 mt-10 mb-5">
-            {data.results &&
-              data.results.map((movie) => (
-              <li className="min-w-60 rounded-xl overflow-hidden border shadow-md bg-white">
-      {/* Movie Poster */}
-      <Link to={`/movie/${movie.id}`}>
-      <div className="relative">
-        <img src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`} alt={movie.original_title} className="w-full h-80 object-cover" />
-        {/* <div className="absolute top-2 right-2 bg-pink-500 text-white text-sm rounded-full w-5 h-5 flex items-center justify-center font-bold">
-          +
-        </div> */}
+                <NavLink
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `block text-white  hover:text-gray-300  hover:bg-slate-500 p-2 rounded-sm ${
+                      isActive ? " bg-sky-900 p-1 underline" : ""
+                    }`
+                  }
+                >
+                  {item.title}
+                </NavLink>
+              </li>
+            );
+          })}
+        </ul>
       </div>
+      <ul className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 px-4 sm:px-10 lg:px-40 mt-10 mb-5">
+        {data.results &&
+          data.results.map((movie) => (
+            <li className=" flex justify-center">
+              {/* Movie Poster */}
+              <Link to={`/movie/${movie.id}`}>
+                <div className="w-[180px] sm:w-[200px] rounded-xl overflow-hidden bg-white shadow-md font-sans relative">
+                  {/* Poster */}
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
+                    alt={movie.original_title}
+                    className="w-full h-80 object-cover block"
+                  />
 
-      {/* Content */}
-      <div className="p-3">
-        <h3 className="text-sm font-semibold text-gray-900 mb-1">{movie.original_title}</h3>
-        <div className="flex items-center justify-between text-xs text-gray-600">
-          <div className="flex items-center gap-1">
-            <Star className="w-4 h-4 text-blue-600" />
-            <span>{movie.vote_average}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <LayoutGrid className="w-4 h-4 text-blue-600" />
-            <span>{movie.popularity}</span>
-          </div>
-        </div>
-      </div>
-      </Link>
-    </li>
-              ))}
-          </ul>
-          <Footer/>
-        </div> 
+                  {/* Score badge */}
+                  <div
+                    className={`absolute bottom-20 left-2 text-white text-sm font-semibold rounded-full w-10 h-10 flex items-center justify-center ${getBadgeColor(
+                      movie.vote_average
+                    )}`}
+                  >
+                    {Math.round(movie.vote_average * 10)}%
+                  </div>
+
+                  {/* Text section */}
+                  <div style={{ padding: "1rem", paddingTop: "2rem" }}>
+                    <h3 className="text-base font-bold mb-2 leading-[1.2] line-clamp-1 text-black">
+                      {movie.original_title}
+                    </h3>
+                    <p
+                      style={{ color: "#888", fontSize: "0.85rem", margin: 0 }}
+                    >
+                      {new Date(movie.release_date).toLocaleDateString(
+                        "en-US",
+                        {
+                          month: "short",
+                          day: "2-digit",
+                          year: "numeric",
+                        }
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            </li>
+          ))}
+      </ul>
+      <Footer />
+    </div>
   );
 }
- 

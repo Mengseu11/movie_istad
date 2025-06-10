@@ -1,12 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchPeople, fetchPeopleDetail } from "./peopleAction";
+import { fetchKnownfor, fetchPeople, fetchPeopleDetail } from "./peopleAction";
 
 
 const initialState = {
     data: {},
     status: "",
-    error: {},
-    detail: {}
+    // error: {},
+    // detail: {},
+    detail: null,
+    knownFor: [],
+  loading: false,
+  error: null
 }
 export const peopleSlice = createSlice({
     name : "people",
@@ -28,6 +32,9 @@ export const peopleSlice = createSlice({
             })
             .addCase(fetchPeopleDetail.fulfilled,(state,action)=> {
                 state.detail = action.payload
+            })
+            .addCase(fetchKnownfor.fulfilled,(state,action)=>{
+                state.knownFor = action.payload
             })
     }
 })

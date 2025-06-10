@@ -7,7 +7,7 @@ import People from "./pages/People.jsx";
 import Home from "./pages/Home.jsx";
 import Error from "./pages/Error.jsx";
 import Login from "./pages/Login.jsx";
-import ContactUs from "./pages/Contact_us.jsx";
+import ContactUs from "./pages/ContactUs.jsx";
 import { Provider } from "react-redux";
 import { store } from "./store.js";
 import MovieDetail from "./pages/MovieDetail.jsx";
@@ -71,7 +71,7 @@ const router = createBrowserRouter([
     element: <Upcoming />,
   },
   {
-    path: "/contact-us",
+    path: "/contactus",
     element: <ContactUs />,
   },
 ]);

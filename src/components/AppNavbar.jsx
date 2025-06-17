@@ -44,14 +44,7 @@ const AvatarMenu = ({ avatar }) => {
           open ? "block" : "hidden"
         }`}
       >
-        <li>
-          <Link
-            to="/dashboard"
-            className="block p-3 text-gray-700 hover:bg-gray-100"
-          >
-            Dashboard
-          </Link>
-        </li>
+        
         <li>
           <button
             onClick={handleLogout}
@@ -124,8 +117,8 @@ export default function AppNavbar() {
 
     const mockResults = [
       { id: 1, title: "Sample Movie", type: "movie" },
-      { id: 2, title: "Sample TV Show", type: "tv" },
-      { id: 3, title: "Sample Person", type: "person" },
+      // { id: 2, title: "Sample TV Show", type: "tv" },
+      // { id: 3, title: "Sample Person", type: "person" },
     ].filter((item) =>
       item.title.toLowerCase().includes(searchQuery.toLowerCase())
     );

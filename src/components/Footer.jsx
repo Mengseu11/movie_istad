@@ -6,9 +6,9 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 text-center md:text-left">
         {/* Logo + Welcome */}
         <div className="flex flex-col items-center md:items-start space-y-4">
-          <h2 className="text-2xl font-bold text-teal-300 leading-tight">
+          {/* <h2 className="text-2xl font-bold text-teal-300 leading-tight">
             THE <br /> MOVIE <br /> DB
-          </h2>
+          </h2> */}
           <div>
             <button className="bg-white text-cyan-500 font-bold py-2 px-4 rounded hover:bg-gray-100 transition">
               Hi Mengseu_168!
